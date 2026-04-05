@@ -5,33 +5,31 @@ int main()
 {
     std::string s, t;
     std::cin >> s >> t;
-    ll max = s.size()*(s.size()+1)/2;
-    // std::cout << max << "\n";
-
-    int ti = 0;
-    int start = 0;
-    int head = 0;
-    int cnt = 0;
-    for (int i = 0; i < s.size(); i++)
+    int n = s.size(), m = t.size();
+    std::vector<std::vector<int>> is(26);
+    for (int i = 0; i < n; i++)
     {
-        if (s[i]==t[ti])
-        {
-            if (ti == 0)
-            {
-                start = i;
-            }
-            
-            ti++;
-            if (ti==t.size())
-            {
-                ti = 0;
-                cnt += (s.size()-i);
-                cnt += (start-head+1);
-                head = start+1;
-            }
-        }
+        is[s[i]-'a'].push_back(i);
     }
-    std::cout << max - cnt << "\n";
+    
+    ll ans = 0;
+    for (int l = 0; l < n; l++)
+    {
+        int r = l;
+        for (char c: t)
+        {
+            std::vector<int>& nis = is[c-'a'];
+            int i = std::lower_bound(nis.begin(), nis.end(), r) - nis.begin();
+            if (i==nis.size())
+            {
+                r = n+1;
+                break;
+            }
+            r = nis[i]+1;
+        }
+        ans += r-l-1;
+    }
+    std::cout << ans << "\n";
     
     return 0;
 }
