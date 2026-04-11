@@ -29,7 +29,6 @@ int main()
         else
         {
             ans = a[i];
-            // std::cout << ans << "\n";
             num++;
             if (num>1)
             {
