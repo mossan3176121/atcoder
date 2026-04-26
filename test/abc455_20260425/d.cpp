@@ -5,40 +5,39 @@ int main()
 {
     int n, q;
     std::cin >> n >> q;
-    std::vector<int> C(q), P(q);
-    for (int i = 0; i < q; i++)
-    {
-        std::cin >> C[i] >> P[i];
-    }
-    std::vector<std::vector<int>> mount(n);
-    std::vector<std::pair<int, int>> pos(n);
-    for (int i = 0; i < n; i++)
-    {
-        mount[i].push_back(i);
-        pos[i] = std::pair(i,0);
-    }
+    std::vector<int> to(n,-1);
+    std::vector<bool> top(n, true);
     for (int i = 0; i < q; i++)
     {
         int c, p;
-        c = C[i]-1;
-        p = P[i]-1;
-        int _p = pos[c].first;
-        int _h = pos[c].second;
-        int m = mount[p].size();
-        mount[p].insert(mount[p].end(), mount[_p].begin()+_h, mount[_p].end());
-        mount[_p].erase(mount[_p].begin()+_h,  mount[_p].end());
-        for (int j = m; j < mount[p].size(); j++)
+        std::cin >> c >> p;
+        c--; p--;
+        top[p] = false;
+        if (to[c]!=-1)
         {
-            int _c = mount[i][j];
-            pos[_c].first = p;
-            pos[_c].second = j;
+            top[to[c]] = true;
+        }
+        to[c] = p;
+    }
+    std::vector<int> ans(n);
+    for (int i = 0; i < n; i++)
+    {
+        if (top[i])
+        {
+            int v = i, cnt = 1;
+            while (to[v] != -1)
+            {
+                v = to[v];
+                cnt++;
+            }
+            ans[v] = cnt;
         }
     }
     for (int i = 0; i < n; i++)
     {
-        std::cout << mount[i].size() << " ";
+        std::cout << ans[i] << " ";
     }
-    std::cout << "\n";
-    
+    std::cout << std::endl;
+        
     return 0;
 }
