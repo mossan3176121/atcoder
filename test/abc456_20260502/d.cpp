@@ -5,35 +5,25 @@ int main()
 {
     std::string s;
     std::cin >> s;
-    ll n = s.size();
-    std::vector<ll> vec;
-    for (ll i = 0; i < n; i++)
+    const ll mod = 998244353;
+    int n = s.size();
+    std::vector<std::vector<ll>> dp(n+1, std::vector<ll>(3,0));
+    for (int i = 1; i <= n; i++)
     {
-        if (s[i]==s[i+1])
+        int c = s[i-1] - 'a';
+        for (int j = 0; j < 3; j++)
         {
-            vec.push_back(i);
-            while (true)
+            if (c==j)
             {
-                i++;
-                vec.push_back(i);
-                if (s[i]!=s[i+1])
-                {
-                    break;
-                }
+                dp[i][j] += (dp[i-1][0] + dp[i-1][1] + dp[i-1][2] + 1)%mod;
             }
-        }
+            else
+            {
+                dp[i][j] = dp[i-1][j];
+            }
+        }        
     }
-    ll val = 1;
-    for (int i = 0; i < n-1-vec.size()+1; i++)
-    {
-        val *= 2;
-    }
-    ll ans = 0;
-    for (int i = 0; i < vec.size(); i++)
-    {
-        ans += val% 998244353;
-    }
-    std::cout << ans << "\n";
-    
+    ll result = (dp[n][0] + dp[n][1] + dp[n][2]) % mod;
+    std::cout << result << std::endl;
     return 0;
 }
